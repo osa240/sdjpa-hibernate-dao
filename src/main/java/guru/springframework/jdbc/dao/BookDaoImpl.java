@@ -1,63 +1,61 @@
 package guru.springframework.jdbc.dao;
 
-import guru.springframework.jdbc.domain.Author;
+import guru.springframework.jdbc.domain.Book;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by jt on 8/28/21.
+ * Created by S.Orlov on 22.05.23
  */
 @Component
-public class AuthorDaoImpl implements AuthorDao {
+public class BookDaoImpl implements BookDao {
     private final EntityManagerFactory entityManagerFactory;
 
-    public AuthorDaoImpl(EntityManagerFactory entityManagerFactory) {
+    public BookDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public Author getById(Long id) {
-        return getEntityManager().find(Author.class, id);
+    public Book getById(Long id) {
+        return getEntityManager().find(Book.class, id);
     }
 
     @Override
-    public Author findAuthorByName(String firstName, String lastName) {
-        TypedQuery<Author> query = getEntityManager().createQuery("select a from Author a where "
-                + "a.firstName = :firstName and a.lastName = :lastName", Author.class);
-        query.setParameter("firstName", firstName);
-        query.setParameter("lastName", lastName);
-
+    public Book findBookByTitle(String title) {
+        TypedQuery<Book> query = getEntityManager().createQuery("SELECT b FROM Book b WHERE b.title = :title", Book.class);
+        query.setParameter("title", title);
         return query.getSingleResult();
     }
 
     @Override
-    public Author saveNewAuthor(Author author) {
+    public Book saveNewBook(Book book) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.persist(author);
+        entityManager.persist(book);
         entityManager.flush();
         entityManager.getTransaction().commit();
-        return author;
+        return book;
     }
 
     @Override
-    public Author updateAuthor(Author author) {
-        EntityManager entityManager = getEntityManager();
-        entityManager.joinTransaction();
-        entityManager.merge(author);
-        entityManager.flush();
-        entityManager.clear();
-        return entityManager.find(Author.class, author.getId());
-    }
-
-    @Override
-    public void deleteAuthorById(Long id) {
+    public Book updateBook(Book book) {
         EntityManager entityManager = getEntityManager();
         entityManager.getTransaction().begin();
-        Author author = entityManager.find(Author.class, id);
-        entityManager.remove(author);
+        entityManager.merge(book);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+        entityManager.clear();
+        return entityManager.find(Book.class, book.getId());
+    }
+
+    @Override
+    public void deleteBookById(Long id) {
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        Book book = entityManager.find(Book.class, id);
+        entityManager.remove(book);
         entityManager.flush();
         entityManager.getTransaction().commit();
     }

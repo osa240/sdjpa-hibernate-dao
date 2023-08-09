@@ -6,11 +6,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 import java.util.Objects;
 
+@NamedQueries({
+        @NamedQuery(name = "book_find_all", query = "from Book"),
+        @NamedQuery(name = "find_book_by_name", query = "SELECT b FROM Book b WHERE b.title = :title")
+})
 @Entity
 public class Book {
 

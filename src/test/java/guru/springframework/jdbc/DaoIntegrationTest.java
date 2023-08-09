@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import java.util.List;
+
 /**
  * Created by jt on 8/28/21.
  */
@@ -28,6 +30,64 @@ public class DaoIntegrationTest {
 
     @Autowired
     BookDao bookDao;
+
+    @Test
+    void testGetAuthorByNameNative() {
+        Author author = authorDao.findAuthorByNameNative("Craig", "Walls");
+
+        assertThat(author).isNotNull();
+    }
+
+    @Test
+    void testGetBookByNameNative() {
+        Book book = bookDao.findBookByNameNative("Clean Code");
+
+        assertThat(book).isNotNull();
+    }
+
+    @Test
+    void testGetBookByTitleCriteria() {
+        Book book = bookDao.findBookByTitleCrireria("Clean Code");
+
+        assertThat(book).isNotNull();
+    }
+
+    @Test
+    void testGetAuthorByNameCriteria() {
+        Author author = authorDao.findAuthorByNameCriteria("Craig", "Walls");
+
+        assertThat(author).isNotNull();
+    }
+
+    @Test
+    void testFindAllBooks() {
+        List<Book> books = bookDao.findAll();
+
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void testFindAllAuthors() {
+        List<Author> authors = authorDao.findAll();
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void testFindBookByISBN() {
+        Book book = bookDao.findByISBN("978-0134494166");
+        assertThat(book).isNotNull();
+    }
+
+    @Test
+    void testListAurhorByLastNameLike() {
+        List<Author> authors = authorDao.listAuthorByLastNameLike("Wall");
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+    }
 
     @Test
     void testDeleteBook() {

@@ -4,7 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
+@NamedQueries({
+        @NamedQuery(name = "author_find_all", query = "from Author"),
+        @NamedQuery(name = "find_by_name", query = "select a from Author a where a.firstName = :firstName and a.lastName = :lastName")
+})
 @Entity
 public class Author {
 
